@@ -113,3 +113,15 @@ Each module handles one responsibility, making the system easy to maintain.
 
 All Python dependencies are listed in requirements.txt.
 
+### Citation
+```
+@misc{ravi2024sam2segmentimages,
+      title={SAM 2: Segment Anything in Images and Videos}, 
+      author={Nikhila Ravi and Valentin Gabeur and Yuan-Ting Hu and Ronghang Hu and Chaitanya Ryali and Tengyu Ma and Haitham Khedr and Roman Rädle and Chloe Rolland and Laura Gustafson and Eric Mintun and Junting Pan and Kalyan Vasudev Alwala and Nicolas Carion and Chao-Yuan Wu and Ross Girshick and Piotr Dollár and Christoph Feichtenhofer},
+      year={2024},
+      eprint={2408.00714},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2408.00714}, 
+}
+```
