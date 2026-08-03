@@ -1,0 +1,33 @@
+# Runtime / local artifacts
+data/
+tmp/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+*.egg-info/
+.dist/
+dist/
+build/
+.DS_Store
+.idea/
+.vscode/
+
+# Cloned by setup_env.sh — do not vendor Meta SAM3 in this repo
+third_party/
+sam3/
+
+# Large media / caches
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.pth
+*.pt
+*.bin
+*.safetensors

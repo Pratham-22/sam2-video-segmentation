@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Video Labeler</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Video Labeler</h1>
+      <p class="subtitle">Follow the steps below — each one tells you what to do and how long it usually takes.</p>
+    </div>
+    <div id="status" class="status-pill">Checking…</div>
+  </header>
+
+  <div class="overall-wrap">
+    <div class="overall-label">
+      <span>Overall progress</span>
+      <span id="overall-pct">0%</span>
+    </div>
+    <div class="progress-bar overall-bar"><div id="overall-fill"></div></div>
+  </div>
+
+  <div class="layout">
+    <aside class="flow-sidebar">
+      <h2 class="flow-title">Your workflow</h2>
+      <ol id="flow-steps" class="flow-list"></ol>
+    </aside>
+
+    <main class="workspace">
+      <!-- Active step hero -->
+      <div id="step-hero" class="step-hero">
+        <div class="step-hero-top">
+          <span id="hero-step-num" class="hero-badge">Step 1</span>
+          <span id="hero-eta" class="hero-eta">~30 sec</span>
+        </div>
+        <h2 id="hero-title">Upload your video</h2>
+        <p id="hero-desc" class="hero-desc">Choose a video file (MP4, AVI, etc.) and upload it to the server.</p>
+        <div id="hero-progress-wrap" class="hero-progress hidden">
+          <div class="progress-bar"><div id="hero-fill"></div></div>
+          <p id="hero-progress-text" class="hero-progress-text"></p>
+        </div>
+        <p id="hero-next" class="hero-next"></p>
+      </div>
+
+      <!-- Step 1 -->
+      <section id="panel-upload" class="panel" data-step="1">
+        <div class="drop-zone" id="drop-zone">
+          <p class="drop-title">Drop video here or browse</p>
+          <p class="drop-hint">MP4 or AVI · large files may take several minutes over SSH</p>
+          <input type="file" id="video-file" accept="video/*" hidden />
+          <button type="button" id="browse-btn" class="primary">Choose file</button>
+        </div>
+        <div class="row">
+          <button id="upload-btn" type="button" class="primary" disabled>Upload video</button>
+        </div>
+        <p id="upload-info" class="info"></p>
+      </section>
+
+      <!-- Step 2 -->
+      <section id="panel-prepare" class="panel hidden" data-step="2">
+        <div class="row spread">
+          <label class="inline">Working on chunk
+            <select id="chunk-select"></select>
+          </label>
+          <button id="prepare-btn" type="button" class="primary">Prepare this chunk</button>
+        </div>
+        <p id="chunk-info" class="info"></p>
+        <div id="chunk-summary" class="summary-box hidden"></div>
+      </section>
+
+      <!-- Step 3 -->
+      <section id="panel-label" class="panel hidden" data-step="3">
+        <p class="instruction">Click the object you want to track. Use <strong class="type-pos">green (+)</strong> to include and <strong class="type-neg">red (−)</strong> to exclude areas.</p>
+        <div class="canvas-wrap">
+          <img id="frame-img" alt="sample frame" />
+          <canvas id="overlay"></canvas>
+          <canvas id="mask-layer"></canvas>
+        </div>
+        <p id="frame-label" class="frame-label"></p>
+        <div class="toolbar">
+          <div class="group">
+            <button type="button" id="pos-mode" class="active mode-pos">+ Include</button>
+            <button type="button" id="neg-mode" class="mode-neg">− Exclude</button>
+          </div>
+          <div class="group">
+            <button type="button" id="undo-btn">Undo</button>
+            <button type="button" id="clear-btn">Clear all</button>
+            <button type="button" id="resample-btn">Different frame</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 4 -->
+      <section id="panel-track" class="panel hidden" data-step="4">
+        <p class="instruction">Preview the mask on one frame, then track it across the whole chunk.</p>
+        <div class="row">
+          <button type="button" id="refine-btn" class="primary">① Preview mask</button>
+          <button type="button" id="track-btn" class="accent">② Track entire chunk</button>
+        </div>
+        <div id="track-progress" class="progress-wrap hidden">
+          <div class="progress-bar"><div id="progress-fill"></div></div>
+          <p id="progress-text">Starting…</p>
+          <p id="progress-eta" class="progress-eta"></p>
+        </div>
+      </section>
+
+      <!-- Step 5 -->
+      <section id="panel-export" class="panel hidden" data-step="5">
+        <p class="instruction">All chunks tracked — build a video with green mask overlays.</p>
+        <div class="row">
+          <button id="export-btn" type="button" class="primary">Generate annotated video</button>
+          <a id="download-link" class="button hidden" href="#" download>Download MP4</a>
+        </div>
+        <div id="export-progress" class="progress-wrap hidden">
+          <div class="progress-bar indeterminate"><div id="export-fill"></div></div>
+          <p id="export-info" class="info">Encoding video…</p>
+        </div>
+        <p id="export-done" class="info hidden"></p>
+      </section>
+    </main>
+
+    <aside class="sidebar">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="points" role="tab">Points</button>
+        <button class="tab" data-tab="chunks" role="tab">Chunks</button>
+        <button class="tab" data-tab="log" role="tab">Log</button>
+      </div>
+      <div id="tab-points" class="tab-panel active">
+        <table id="points-table">
+          <thead><tr><th>#</th><th>X</th><th>Y</th><th>Type</th><th></th></tr></thead>
+          <tbody id="points-body"></tbody>
+        </table>
+        <p id="points-empty" class="muted">No points yet — click the image in step 3.</p>
+      </div>
+      <div id="tab-chunks" class="tab-panel">
+        <ul id="chunk-list" class="chunk-list"></ul>
+      </div>
+      <div id="tab-log" class="tab-panel">
+        <pre id="log"></pre>
+      </div>
+    </aside>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

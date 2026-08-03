@@ -1,0 +1,8 @@
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.6
+Pillow>=10.0
+numpy>=1.26
+
+# GPU node: use welding/.venv-sam3 (transformers>=5.0 for Sam3TrackerVideoModel)
+# pip install "transformers>=5.0.0" accelerate torch torchvision
