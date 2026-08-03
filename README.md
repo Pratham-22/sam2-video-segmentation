@@ -124,5 +124,4 @@ mkdir -p "$DATA_ROOT"
 
 ## License / third-party
 
-- This UI/service code: use / share as needed for your project.
 - Meta SAM3 (`facebookresearch/sam3`) and Hugging Face weights have their own licenses and access terms — request access before using real tracking.
