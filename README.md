@@ -29,8 +29,8 @@ sam3-video-labeler/
 ## One-time setup
 
 ```bash
-git clone <THIS_REPO_URL> sam3-video-labeler
-cd sam3-video-labeler
+git clone https://github.com/OSU-SAI-Lab/Welding_sam3.git
+cd Welding_sam3
 chmod +x scripts/*.sh
 ./scripts/setup_env.sh
 ```
