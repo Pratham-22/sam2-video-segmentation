@@ -8,11 +8,13 @@ This repository evolved from an earlier SAM2 CLI point-prompt pipeline into a fu
 
 ## Demo results
 
-Annotated welding overlay (~34s) — click the poster to open the MP4 in GitHub’s video viewer:
+Annotated welding overlay (CEE204 cut). GIF plays inline; full MP4 is linked below.
 
-[![Annotated welding demo](docs/images/welding_annotated_poster.jpg)](docs/videos/welding_annotated_demo.mp4)
+![Annotated welding demo](docs/images/welding_annotated_demo.gif)
 
-**[Download / play: `docs/videos/welding_annotated_demo.mp4`](docs/videos/welding_annotated_demo.mp4)** (H.264, ~42 MB)
+**Full video (~34s, H.264, ~42 MB):**  
+https://github.com/OSU-SAI-Lab/Welding_sam3/blob/main/docs/videos/welding_annotated_demo.mp4
+
 
 ## Layout
 
@@ -24,7 +26,7 @@ sam3-video-labeler/
     setup_env.sh        # create venv + install deps + clone Meta SAM3
     run_local.sh        # start API + UI
   docs/
-    images/             # README poster frame
+    images/             # README demo GIF
     videos/             # annotated demo MP4
   data/                 # uploads + masks (gitignored)
   third_party/sam3/     # created by setup_env.sh (gitignored)
