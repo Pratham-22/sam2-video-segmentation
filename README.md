@@ -1,10 +1,10 @@
 # SAM3 Video Labeler
 
-Browser-based welding / industrial video labeling:
+Browser-based video labeling with Meta **SAM3**:
 
-**upload → chunk → click points → preview mask → track → export MP4**
+**upload → chunk → click points → preview mask → track → export MP4 / COCO / YOLO**
 
-Built around Meta **SAM3** video tracking.
+This repository evolved from an earlier SAM2 CLI point-prompt pipeline into a full **SAM3** web UI + GPU service for applied annotation (including welding video workflows).
 
 ## Layout
 
@@ -29,8 +29,14 @@ sam3-video-labeler/
 ## One-time setup
 
 ```bash
-git clone https://github.com/OSU-SAI-Lab/Welding_sam3.git
-cd Welding_sam3
+# Personal repo
+git clone https://github.com/Pratham-22/sam2-video-segmentation.git
+cd sam2-video-segmentation
+
+# Lab mirror (same codebase)
+# git clone https://github.com/OSU-SAI-Lab/Welding_sam3.git
+# cd Welding_sam3
+
 chmod +x scripts/*.sh
 ./scripts/setup_env.sh
 ```
