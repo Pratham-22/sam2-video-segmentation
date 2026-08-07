@@ -6,6 +6,18 @@ Browser-based video labeling with Meta **SAM3**:
 
 This repository evolved from an earlier SAM2 CLI point-prompt pipeline into a full **SAM3** web UI + GPU service for applied annotation (including welding video workflows).
 
+## Demo results
+
+Example welding-frame segmentation from the labeling / mask-refinement workflow (point & box prompts, then morphological cleanup):
+
+![SAM variant × prompt comparison on a welding frame](docs/images/methods_compare.jpg)
+
+![SAM mask vs morph-close + fill-holes cleanup](docs/images/mask_pipeline_frame422.jpg)
+
+| Source frame (welding) |
+|:---:|
+| ![Welding source frame](docs/images/source_frame_422.jpg) |
+
 ## Layout
 
 ```text
@@ -15,6 +27,7 @@ sam3-video-labeler/
   scripts/
     setup_env.sh        # create venv + install deps + clone Meta SAM3
     run_local.sh        # start API + UI
+  docs/images/          # README demo stills
   data/                 # uploads + masks (gitignored)
   third_party/sam3/     # created by setup_env.sh (gitignored)
 ```
