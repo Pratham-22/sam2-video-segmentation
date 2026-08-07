@@ -8,11 +8,11 @@ This repository evolved from an earlier SAM2 CLI point-prompt pipeline into a fu
 
 ## Demo results
 
-Annotated welding overlay (~41s) — click the poster to open the MP4 in GitHub’s video viewer:
+Annotated welding overlay (~34s) — click the poster to open the MP4 in GitHub’s video viewer:
 
 [![Annotated welding demo](docs/images/welding_annotated_poster.jpg)](docs/videos/welding_annotated_demo.mp4)
 
-**[Download / play: `docs/videos/welding_annotated_demo.mp4`](docs/videos/welding_annotated_demo.mp4)** (H.264, ~21 MB)
+**[Download / play: `docs/videos/welding_annotated_demo.mp4`](docs/videos/welding_annotated_demo.mp4)** (H.264, ~42 MB)
 
 ## Layout
 
