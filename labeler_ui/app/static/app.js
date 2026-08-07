@@ -695,6 +695,44 @@ $("export-btn").addEventListener("click", async () => {
   updateOverallProgress();
 });
 
+async function runDatasetExport(kind, buttonId, linkId, label) {
+  if (!uploadId) return;
+  const btn = $(buttonId);
+  const info = $("dataset-export-info");
+  const link = $(linkId);
+  btn.disabled = true;
+  info.textContent = `Building ${label}…`;
+  link.classList.add("hidden");
+  const t0 = Date.now();
+  try {
+    const r = await fetch(`/api/uploads/${uploadId}/export/${kind}`, { method: "POST" });
+    if (!r.ok) {
+      info.textContent = await r.text();
+      return;
+    }
+    const data = await r.json();
+    const elapsed = formatElapsed(Date.now() - t0);
+    info.textContent = `✓ ${label} ready in ${elapsed}`;
+    link.href = `/api/uploads/${uploadId}/export/${kind}/download`;
+    link.classList.remove("hidden");
+    log(`${label} export: ${data.path || kind}`);
+  } catch (err) {
+    info.textContent = String(err);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+$("export-coco-btn").addEventListener("click", () =>
+  runDatasetExport("coco", "export-coco-btn", "download-coco-link", "COCO JSON")
+);
+$("export-yolo-btn").addEventListener("click", () =>
+  runDatasetExport("yolo", "export-yolo-btn", "download-yolo-link", "YOLO JSON")
+);
+$("export-bbox-btn").addEventListener("click", () =>
+  runDatasetExport("bbox-zip", "export-bbox-btn", "download-bbox-link", "bbox images ZIP")
+);
+
 document.querySelectorAll(".tab").forEach((tab) => {
   tab.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));

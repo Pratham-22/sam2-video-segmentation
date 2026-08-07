@@ -82,6 +82,27 @@ class Sam3VideoClient:
     def export_download_url(self, upload_id: str) -> str:
         return f"{self.base_url}/uploads/{upload_id}/export/download"
 
+    def export_dataset(self, upload_id: str, kind: str) -> dict[str, Any]:
+        """kind: coco | yolo | bbox-zip"""
+        r = requests.post(
+            f"{self.base_url}/uploads/{upload_id}/export/{kind}",
+            timeout=3600,
+        )
+        if not r.ok:
+            detail = r.text
+            try:
+                detail = r.json().get("detail", detail)
+            except Exception:
+                pass
+            raise requests.HTTPError(
+                f"Dataset export ({kind}) failed ({r.status_code}): {detail}",
+                response=r,
+            )
+        return r.json()
+
+    def dataset_download_url(self, upload_id: str, kind: str) -> str:
+        return f"{self.base_url}/uploads/{upload_id}/export/{kind}/download"
+
     def prepare_chunk(self, upload_id: str, chunk_index: int) -> dict[str, Any]:
         r = requests.post(
             f"{self.base_url}/uploads/{upload_id}/chunks/prepare",

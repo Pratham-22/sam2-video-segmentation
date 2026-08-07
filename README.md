@@ -111,6 +111,21 @@ mkdir -p "$DATA_ROOT"
 | POST | `/sessions/{id}/propagate` | Track chunk (SSE job) |
 | POST | `/uploads/{id}/export` | Build annotated MP4 |
 | GET | `/uploads/{id}/export/download` | Download MP4 |
+| POST | `/uploads/{id}/export/coco` | Build COCO JSON from masks |
+| GET | `/uploads/{id}/export/coco/download` | Download COCO JSON |
+| POST | `/uploads/{id}/export/yolo` | Build YOLO-style JSON from masks |
+| GET | `/uploads/{id}/export/yolo/download` | Download YOLO JSON |
+| POST | `/uploads/{id}/export/bbox-zip` | Build ZIP of frames with drawn boxes |
+| GET | `/uploads/{id}/export/bbox-zip/download` | Download bbox images ZIP |
+
+### Dataset exports
+
+After at least one chunk is tracked, Step 5 can download:
+
+- **COCO JSON** — `images` + `annotations` with `bbox` `[x, y, w, h]` and optional polygon `segmentation`
+- **YOLO JSON** — per-frame objects with normalized `bbox_xywhn` (`cx cy w h`) ready to turn into `labels/*.txt`
+- **BBox images ZIP** — JPEGs named like the original video stem, with green boxes drawn on tracked objects
+
 
 ## Troubleshooting
 

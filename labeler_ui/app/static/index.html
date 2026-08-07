@@ -109,7 +109,7 @@
 
       <!-- Step 5 -->
       <section id="panel-export" class="panel hidden" data-step="5">
-        <p class="instruction">All chunks tracked — build a video with green mask overlays.</p>
+        <p class="instruction">Download the annotated video and dataset files (COCO / YOLO JSON, bbox image ZIP).</p>
         <div class="row">
           <button id="export-btn" type="button" class="primary">Generate annotated video</button>
           <a id="download-link" class="button hidden" href="#" download>Download MP4</a>
@@ -119,6 +119,20 @@
           <p id="export-info" class="info">Encoding video…</p>
         </div>
         <p id="export-done" class="info hidden"></p>
+
+        <div class="dataset-exports">
+          <h3 class="dataset-title">Dataset downloads</h3>
+          <p class="instruction">Uses tracked masks from all finished chunks. Works even if the MP4 export is not generated yet.</p>
+          <div class="row wrap">
+            <button id="export-coco-btn" type="button">Download COCO JSON</button>
+            <button id="export-yolo-btn" type="button">Download YOLO JSON</button>
+            <button id="export-bbox-btn" type="button" class="accent">Download bbox images ZIP</button>
+          </div>
+          <p id="dataset-export-info" class="info"></p>
+          <a id="download-coco-link" class="button hidden" href="#" download>COCO JSON ready</a>
+          <a id="download-yolo-link" class="button hidden" href="#" download>YOLO JSON ready</a>
+          <a id="download-bbox-link" class="button hidden" href="#" download>BBox ZIP ready</a>
+        </div>
       </section>
     </main>
 

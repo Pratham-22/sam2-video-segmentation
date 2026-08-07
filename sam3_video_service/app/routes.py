@@ -30,6 +30,7 @@ from app.schemas import (
 from app.session_manager import session_manager
 from app import video_io
 from app import video_export
+from app import dataset_export
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -193,6 +194,105 @@ def download_export(upload_id: str):
     meta = storage.load_upload_meta(upload_id)
     name = Path(meta.get("original_filename", "video.mp4")).stem + "_annotated.mp4"
     return FileResponse(path, media_type="video/mp4", filename=name)
+
+
+@router.post("/uploads/{upload_id}/export/coco")
+def export_coco(upload_id: str) -> dict[str, Any]:
+    try:
+        storage.load_upload_meta(upload_id)
+        path = dataset_export.build_coco_json(upload_id)
+    except FileNotFoundError as e:
+        raise HTTPException(404, str(e)) from e
+    except dataset_export.DatasetExportError as e:
+        raise HTTPException(400, str(e)) from e
+    except Exception as e:
+        raise HTTPException(500, str(e)) from e
+    return {
+        "status": "ready",
+        "path": path.name,
+        "download_url": f"/uploads/{upload_id}/export/coco/download",
+    }
+
+
+@router.get("/uploads/{upload_id}/export/coco/download")
+def download_coco(upload_id: str):
+    from fastapi.responses import FileResponse
+
+    path = dataset_export.coco_json_path(upload_id)
+    if not path.is_file():
+        try:
+            path = dataset_export.build_coco_json(upload_id)
+        except dataset_export.DatasetExportError as e:
+            raise HTTPException(400, str(e)) from e
+        except FileNotFoundError as e:
+            raise HTTPException(404, str(e)) from e
+    return FileResponse(path, media_type="application/json", filename=path.name)
+
+
+@router.post("/uploads/{upload_id}/export/yolo")
+def export_yolo(upload_id: str) -> dict[str, Any]:
+    try:
+        storage.load_upload_meta(upload_id)
+        path = dataset_export.build_yolo_json(upload_id)
+    except FileNotFoundError as e:
+        raise HTTPException(404, str(e)) from e
+    except dataset_export.DatasetExportError as e:
+        raise HTTPException(400, str(e)) from e
+    except Exception as e:
+        raise HTTPException(500, str(e)) from e
+    return {
+        "status": "ready",
+        "path": path.name,
+        "download_url": f"/uploads/{upload_id}/export/yolo/download",
+    }
+
+
+@router.get("/uploads/{upload_id}/export/yolo/download")
+def download_yolo(upload_id: str):
+    from fastapi.responses import FileResponse
+
+    path = dataset_export.yolo_json_path(upload_id)
+    if not path.is_file():
+        try:
+            path = dataset_export.build_yolo_json(upload_id)
+        except dataset_export.DatasetExportError as e:
+            raise HTTPException(400, str(e)) from e
+        except FileNotFoundError as e:
+            raise HTTPException(404, str(e)) from e
+    return FileResponse(path, media_type="application/json", filename=path.name)
+
+
+@router.post("/uploads/{upload_id}/export/bbox-zip")
+def export_bbox_zip(upload_id: str) -> dict[str, Any]:
+    try:
+        storage.load_upload_meta(upload_id)
+        path = dataset_export.build_bbox_overlay_zip(upload_id)
+    except FileNotFoundError as e:
+        raise HTTPException(404, str(e)) from e
+    except dataset_export.DatasetExportError as e:
+        raise HTTPException(400, str(e)) from e
+    except Exception as e:
+        raise HTTPException(500, str(e)) from e
+    return {
+        "status": "ready",
+        "path": path.name,
+        "download_url": f"/uploads/{upload_id}/export/bbox-zip/download",
+    }
+
+
+@router.get("/uploads/{upload_id}/export/bbox-zip/download")
+def download_bbox_zip(upload_id: str):
+    from fastapi.responses import FileResponse
+
+    path = dataset_export.bbox_zip_path(upload_id)
+    if not path.is_file():
+        try:
+            path = dataset_export.build_bbox_overlay_zip(upload_id)
+        except dataset_export.DatasetExportError as e:
+            raise HTTPException(400, str(e)) from e
+        except FileNotFoundError as e:
+            raise HTTPException(404, str(e)) from e
+    return FileResponse(path, media_type="application/zip", filename=path.name)
 
 
 @router.get("/uploads/{upload_id}/chunks")

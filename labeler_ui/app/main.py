@@ -151,6 +151,57 @@ def download_export(upload_id: str):
     )
 
 
+@app.post("/api/uploads/{upload_id}/export/{kind}")
+def export_dataset(upload_id: str, kind: str):
+    if kind not in {"coco", "yolo", "bbox-zip"}:
+        raise HTTPException(400, "kind must be coco, yolo, or bbox-zip")
+    try:
+        return client.export_dataset(upload_id, kind)
+    except requests.HTTPError as e:
+        status = e.response.status_code if e.response is not None else 502
+        detail = str(e)
+        if e.response is not None:
+            try:
+                detail = e.response.json().get("detail", detail)
+            except Exception:
+                detail = e.response.text or detail
+        raise HTTPException(status, detail) from e
+    except Exception as e:
+        raise HTTPException(502, str(e)) from e
+
+
+@app.get("/api/uploads/{upload_id}/export/{kind}/download")
+def download_dataset(upload_id: str, kind: str):
+    import requests as req
+
+    if kind not in {"coco", "yolo", "bbox-zip"}:
+        raise HTTPException(400, "kind must be coco, yolo, or bbox-zip")
+    url = client.dataset_download_url(upload_id, kind)
+    try:
+        r = req.get(url, stream=True, timeout=3600)
+        r.raise_for_status()
+    except Exception as e:
+        raise HTTPException(502, str(e)) from e
+    from fastapi.responses import StreamingResponse
+
+    if kind == "bbox-zip":
+        media = "application/zip"
+        filename = f"{upload_id}_bbox_images.zip"
+    else:
+        media = "application/json"
+        filename = f"{upload_id}_{kind}.json"
+    # Prefer server-provided filename when present.
+    cd = r.headers.get("content-disposition") or ""
+    if "filename=" in cd:
+        filename = cd.split("filename=")[-1].strip().strip('"')
+
+    return StreamingResponse(
+        r.iter_content(chunk_size=65536),
+        media_type=media,
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
 @app.get("/api/uploads/{upload_id}/chunks")
 def chunks(upload_id: str):
     try:
