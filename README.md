@@ -8,15 +8,11 @@ This repository evolved from an earlier SAM2 CLI point-prompt pipeline into a fu
 
 ## Demo results
 
-Example welding-frame segmentation from the labeling / mask-refinement workflow (point & box prompts, then morphological cleanup):
+Annotated welding overlay (~41s) — click the poster to open the MP4 in GitHub’s video viewer:
 
-![SAM variant × prompt comparison on a welding frame](docs/images/methods_compare.jpg)
+[![Annotated welding demo](docs/images/welding_annotated_poster.jpg)](docs/videos/welding_annotated_demo.mp4)
 
-![SAM mask vs morph-close + fill-holes cleanup](docs/images/mask_pipeline_frame422.jpg)
-
-| Source frame (welding) |
-|:---:|
-| ![Welding source frame](docs/images/source_frame_422.jpg) |
+**[Download / play: `docs/videos/welding_annotated_demo.mp4`](docs/videos/welding_annotated_demo.mp4)** (H.264, ~21 MB)
 
 ## Layout
 
@@ -27,7 +23,9 @@ sam3-video-labeler/
   scripts/
     setup_env.sh        # create venv + install deps + clone Meta SAM3
     run_local.sh        # start API + UI
-  docs/images/          # README demo stills
+  docs/
+    images/             # README poster frame
+    videos/             # annotated demo MP4
   data/                 # uploads + masks (gitignored)
   third_party/sam3/     # created by setup_env.sh (gitignored)
 ```

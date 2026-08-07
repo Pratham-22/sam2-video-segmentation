@@ -31,3 +31,7 @@ sam3/
 *.pt
 *.bin
 *.safetensors
+
+# Keep README demo video (other mp4s stay ignored)
+!docs/videos/
+!docs/videos/*.mp4
